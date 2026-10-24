@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">منصة الذكاء الاصطناعي وشروحات ديسكورد | aba_alraoof</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Cairo & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome 6 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Cairo', 'Inter', 'sans-serif'],
+                        latin: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        },
+                        discord: {
+                            DEFAULT: '#5865F2',
+                            dark: '#4752C4'
+                        },
+                        tiktok: {
+                            DEFAULT: '#000000',
+                            red: '#EE1D52',
+                            cyan: '#69C9D0'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #818cf8;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4f46e5;
+        }
+        .glow-effect {
+            box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col justify-between antialiased">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 start-6 z-50 transform translate-y-32 opacity-0 transition-all duration-300 bg-slate-900 dark:bg-slate-800 text-white px-6 py-3.5 rounded-2xl shadow-2xl flex items-center space-x-3 rtl:space-x-reverse border border-slate-700/50">
+        <div id="toast-icon-bg" class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <i id="toast-icon" class="fa-solid fa-check text-sm"></i>
+        </div>
+        <span id="toast-msg" class="font-semibold text-sm">تم تنفيذ العملية بنجاح!</span>
+    </div>
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Logo & Brand -->
+            <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse group">
+                <div class="w-11 h-11 bg-gradient-to-tr from-brand-600 via-indigo-500 to-violet-500 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-brand-500/30 group-hover:scale-105 transition duration-300">
+                    <i class="fa-solid fa-wand-magic-sparkles text-xl"></i>
+                </div>
+                <div>
+                    <span id="logoText" class="text-xl font-black bg-gradient-to-r from-brand-600 via-indigo-500 to-violet-600 bg-clip-text text-transparent">منصة الذكاء الاصطناعي</span>
+                    <span class="block text-xs text-slate-400 dark:text-slate-500 font-bold tracking-widest">@aba_alraoof</span>
+                </div>
+            </a>
+
+            <!-- Direct TikTok Link Header Pill -->
+            <div class="hidden lg:flex items-center">
+                <a href="https://www.tiktok.com/@aba_alraoof" target="_blank" rel="noopener noreferrer" class="flex items-center space-x-2.5 rtl:space-x-reverse bg-slate-900 text-white dark:bg-white dark:text-slate-900 px-4 py-2 rounded-2xl text-xs font-bold hover:scale-105 transition shadow-md">
+                    <i class="fa-brands fa-tiktok text-sm"></i>
+                    <span>TikTok @aba_alraoof</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-70"></i>
+                </a>
+            </div>
+
+            <!-- Actions Right -->
+            <div class="flex items-center space-x-2.5 rtl:space-x-reverse">
+                
+                <!-- Dark Mode Toggle -->
+                <button onclick="toggleDarkMode()" class="w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center transition hover:bg-slate-200 dark:hover:bg-slate-700" title="Theme Toggle">
+                    <i id="themeIcon" class="fa-solid fa-moon"></i>
+                </button>
+
+                <!-- Language Selector -->
+                <div class="relative">
+                    <select id="langSelect" onchange="changeLanguage(this.value)" class="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-xs font-bold rounded-2xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer appearance-none pe-8">
+                        <option value="ar">العربية 🇸🇦</option>
+                        <option value="en">English 🇺🇸</option>
+                        <option value="fr">Français 🇫🇷</option>
+                        <option value="de">Deutsch 🇩🇪</option>
+                        <option value="hi">हिन्दी 🇮🇳</option>
+                    </select>
+                    <i class="fa-solid fa-chevron-down absolute end-3 top-1/2 -translate-y-1/2 text-[10px] text-slate-400 pointer-events-none"></i>
+                </div>
+
+                <!-- Add Button -->
+                <button onclick="openModal()" class="bg-brand-600 hover:bg-brand-700 text-white text-xs font-extrabold px-4 py-2.5 rounded-2xl shadow-lg shadow-brand-500/25 transition flex items-center space-x-2 rtl:space-x-reverse">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span id="addBtnText">أضف أداة / شرح</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden py-14 sm:py-20 bg-gradient-to-b from-brand-50/60 via-white to-slate-50 dark:from-slate-900/60 dark:via-slate-950 dark:to-slate-950 border-b border-slate-200/60 dark:border-slate-800/80">
+        <div class="max-w-5xl mx-auto px-4 text-center relative z-10">
+            
+            <!-- Hero Badge -->
+            <a href="https://www.tiktok.com/@aba_alraoof" target="_blank" class="inline-flex items-center space-x-2 rtl:space-x-reverse px-4 py-2 rounded-full text-xs font-bold bg-indigo-100/80 dark:bg-indigo-950/80 text-brand-700 dark:text-indigo-300 mb-6 border border-indigo-200 dark:border-indigo-800 hover:scale-105 transition shadow-sm">
+                <i class="fa-brands fa-tiktok text-sm"></i>
+                <span id="heroBadge">الحساب الرسمي على تيك توك @aba_alraoof</span>
+                <i class="fa-solid fa-chevron-left text-[10px] rtl:rotate-180"></i>
+            </a>
+
+            <!-- Hero Main Title -->
+            <h1 id="heroTitle" class="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-6">
+                دليلك الشامل لأقوى <span class="bg-gradient-to-r from-brand-600 via-indigo-500 to-violet-600 bg-clip-text text-transparent">أدوات الذكاء الاصطناعي وشروحات ديسكورد</span>
+            </h1>
+
+            <!-- Hero Description -->
+            <p id="heroDesc" class="text-base sm:text-lg text-slate-600 dark:text-slate-400 mb-10 max-w-3xl mx-auto font-medium leading-relaxed">
+                مكتبة متكاملة تجمع أفضل تطبيقات الـ AI، بوتات وشروحات ديسكورد، مع إرشادات احترافية للهندسة التوجيهية وتوليد الأكواد لخدمة صناع المحتوى والمطورين.
+            </p>
+
+            <!-- Search Bar -->
+            <div class="bg-white dark:bg-slate-900 p-2.5 rounded-3xl shadow-2xl shadow-indigo-500/10 dark:shadow-none border border-slate-200 dark:border-slate-800 max-w-2xl mx-auto flex items-center gap-2">
+                <div class="relative flex-1 flex items-center">
+                    <i class="fa-solid fa-magnifying-glass absolute start-4 text-slate-400"></i>
+                    <input type="text" id="searchInput" oninput="filterTools()" placeholder="ابحث عن أداة، بوت ديسكورد، أو نصيحة برمجة..." class="w-full ps-11 pe-4 py-3 bg-transparent text-slate-800 dark:text-slate-100 text-sm font-semibold placeholder-slate-400 focus:outline-none">
+                </div>
+                <button onclick="filterTools()" id="searchBtn" class="bg-slate-900 dark:bg-brand-600 hover:bg-slate-800 dark:hover:bg-brand-700 text-white font-bold px-6 py-3 rounded-2xl transition text-sm flex items-center gap-2">
+                    <span id="searchBtnText">بحث</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content & Directory -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
+        
+        <!-- Category Filter Buttons -->
+        <div class="flex items-center justify-start sm:justify-center gap-2.5 mb-10 overflow-x-auto pb-4 pt-1 no-scrollbar" id="categoryContainer">
+            <button onclick="setCategory('all')" class="cat-btn active bg-brand-600 text-white px-5 py-2.5 rounded-2xl text-xs font-bold shadow-md shadow-brand-500/20 whitespace-nowrap transition">
+                <i class="fa-solid fa-border-all me-1.5"></i> <span id="catAll">الكل</span>
+            </button>
+            <button onclick="setCategory('text')" class="cat-btn bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 px-5 py-2.5 rounded-2xl text-xs font-bold border border-slate-200 dark:border-slate-800 hover:border-brand-500 whitespace-nowrap transition">
+                <i class="fa-solid fa-pen-nib text-brand-500 me-1.5"></i> <span id="catText">كتابة وبحث</span>
+            </button>
+            <button onclick="setCategory('image')" class="cat-btn bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 px-5 py-2.5 rounded-2xl text-xs font-bold border border-slate-200 dark:border-slate-800 hover:border-brand-500 whitespace-nowrap transition">
+                <i class="fa-solid fa-palette text-violet-500 me-1.5"></i> <span id="catImage">صور وفيديو</span>
+            </button>
+            <button onclick="setCategory('code')" class="cat-btn bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 px-5 py-2.5 rounded-2xl text-xs font-bold border border-slate-200 dark:border-slate-800 hover:border-brand-500 whitespace-nowrap transition">
+                <i class="fa-solid fa-code text-emerald-500 me-1.5"></i> <span id="catCode">برمجة وتطوير</span>
+            </button>
+            <button onclick="setCategory('discord')" class="cat-btn bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 px-5 py-2.5 rounded-2xl text-xs font-bold border border-slate-200 dark:border-slate-800 hover:border-discord whitespace-nowrap transition">
+                <i class="fa-brands fa-discord text-discord me-1.5"></i> <span id="catDiscord">ديسكورد وبوتات</span>
+            </button>
+            <button onclick="setCategory('tips')" class="cat-btn bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 px-5 py-2.5 rounded-2xl text-xs font-bold border border-slate-200 dark:border-slate-800 hover:border-amber-500 whitespace-nowrap transition">
+                <i class="fa-solid fa-lightbulb text-amber-500 me-1.5"></i> <span id="catTips">نصائح وإرشادات</span>
+            </button>
+            <button onclick="setCategory('fav')" class="cat-btn bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 px-5 py-2.5 rounded-2xl text-xs font-bold border border-slate-200 dark:border-slate-800 hover:border-rose-500 whitespace-nowrap transition">
+                <i class="fa-solid fa-heart text-rose-500 me-1.5"></i> <span id="catFav">المفضلة</span>
+            </button>
+        </div>
+
+        <!-- Directory Grid -->
+        <div id="toolsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 my-6">
+            <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <h3 id="emptyTitle" class="text-lg font-bold text-slate-800 dark:text-slate-200 mb-1">لم يتم العثور على نتائج</h3>
+            <p id="emptyDesc" class="text-sm text-slate-500 dark:text-slate-400">جرب البحث بكلمات مختلفة أو اختر تصنيفاً آخر.</p>
+        </div>
+
+    </main>
+
+    <!-- Footer Section -->
+    <footer id="footer" class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            
+            <!-- Creator TikTok Callout -->
+            <div class="inline-flex flex-col sm:flex-row items-center justify-center gap-4 bg-slate-50 dark:bg-slate-800/60 p-4 px-6 rounded-3xl border border-slate-200 dark:border-slate-700/60 mb-8">
+                <div class="flex items-center space-x-3 rtl:space-x-reverse">
+                    <div class="w-10 h-10 rounded-2xl bg-black text-white flex items-center justify-center text-lg">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </div>
+                    <div class="text-start">
+                        <span class="block text-xs text-slate-400 font-bold">تابع كل جديد على تيك توك</span>
+                        <span class="text-sm font-black text-slate-900 dark:text-white">@aba_alraoof</span>
+                    </div>
+                </div>
+                <a href="https://www.tiktok.com/@aba_alraoof" target="_blank" rel="noopener noreferrer" class="bg-black hover:bg-slate-800 text-white text-xs font-bold px-5 py-2.5 rounded-2xl transition shadow-md">
+                    متابعة الحساب <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ms-1"></i>
+                </a>
+            </div>
+
+            <!-- Social Links -->
+            <div class="flex items-center justify-center space-x-4 rtl:space-x-reverse mb-6">
+                <a href="https://www.tiktok.com/@aba_alraoof" target="_blank" class="w-11 h-11 bg-slate-100 dark:bg-slate-800 hover:bg-black hover:text-white text-slate-700 dark:text-slate-300 rounded-2xl flex items-center justify-center transition text-lg">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+                <a href="https://discord.com" target="_blank" class="w-11 h-11 bg-slate-100 dark:bg-slate-800 hover:bg-discord hover:text-white text-slate-700 dark:text-slate-300 rounded-2xl flex items-center justify-center transition text-lg">
+                    <i class="fa-brands fa-discord"></i>
+                </a>
+                <a href="https://github.com" target="_blank" class="w-11 h-11 bg-slate-100 dark:bg-slate-800 hover:bg-slate-900 hover:text-white text-slate-700 dark:text-slate-300 rounded-2xl flex items-center justify-center transition text-lg">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+            </div>
+
+            <p class="text-xs font-bold text-slate-500 dark:text-slate-400">
+                جميع الحقوق محفوظة © 2026 | تطوير وإنشاء <a href="https://www.tiktok.com/@aba_alraoof" target="_blank" class="text-brand-600 dark:text-brand-500 font-extrabold hover:underline">@aba_alraoof</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Interactive Add Modal -->
+    <div id="addModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 relative">
+            
+            <button onclick="closeModal()" class="absolute top-6 end-6 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <h3 id="modalHeading" class="text-xl font-black text-slate-900 dark:text-white mb-2">إضافة أداة أو شرح جديد</h3>
+            <p id="modalSubheading" class="text-xs text-slate-500 dark:text-slate-400 mb-6">أدخل البيانات وسيتم حفظ الأداة في قائمتك الخاصة فوراً.</p>
+
+            <form onsubmit="handleAddTool(event)" class="space-y-4">
+                <div>
+                    <label id="lblTitle" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">اسم الأداة / العنوان</label>
+                    <input type="text" id="modalTitle" required class="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+
+                <div>
+                    <label id="lblDesc" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">الوصف التفصيلي</label>
+                    <textarea id="modalDesc" required rows="3" class="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label id="lblUrl" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">رابط الأداة / الشرح</label>
+                        <input type="url" id="modalUrl" required placeholder="https://..." class="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+
+                    <div>
+                        <label id="lblCat" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">التصنيف</label>
+                        <select id="modalCat" class="w-full px-4 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="text">كتابة وبحث</option>
+                            <option value="image">صور وفيديو</option>
+                            <option value="code">برمجة وتطوير</option>
+                            <option value="discord">ديسكورد وبوتات</option>
+                            <option value="tips">نصائح وإرشادات</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" id="btnSubmitModal" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-black py-3.5 rounded-2xl text-sm transition shadow-lg shadow-brand-500/25 mt-2">
+                    حفظ وإضافة الآن
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Script Logic -->
+    <script>
+        // Languages Localized Database
+        const translations = {
+            ar: {
+                pageTitle: "منصة الذكاء الاصطناعي وشروحات ديسكورد | aba_alraoof",
+                logoText: "منصة الذكاء الاصطناعي",
+                heroBadge: "الحساب الرسمي على تيك توك @aba_alraoof",
+                heroTitle: "دليلك الشامل لأقوى أدوات الذكاء الاصطناعي وشروحات ديسكورد",
+                heroDesc: "مكتبة متكاملة تجمع أفضل تطبيقات الـ AI، بوتات وشروحات ديسكورد، مع إرشادات احترافية للهندسة التوجيهية وتوليد الأكواد.",
+                searchPlaceholder: "ابحث عن أداة، بوت ديسكورد، أو نصيحة برمجة...",
+                searchBtnText: "بحث",
+                addBtnText: "أضف أداة / شرح",
+                catAll: "الكل",
+                catText: "كتابة وبحث",
+                catImage: "صور وفيديو",
+                catCode: "برمجة وتطوير",
+                catDiscord: "ديسكورد وبوتات",
+                catTips: "نصائح وإرشادات",
+                catFav: "المفضلة",
+                openLink: "فتح الرابط",
+                emptyTitle: "لم يتم العثور على نتائج",
+                emptyDesc: "جرب البحث بكلمات مختلفة أو اختر تصنيفاً آخر.",
+                modalHeading: "إضافة أداة أو شرح جديد",
+                modalSubheading: "أدخل البيانات وسيتم حفظ الأداة في قائمتك الخاصة فوراً.",
+                lblTitle: "اسم الأداة / العنوان",
+                lblDesc: "الوصف التفصيلي",
+                lblUrl: "رابط الأداة / الشرح",
+                lblCat: "التصنيف",
+                btnSubmitModal: "حفظ وإضافة الآن",
+                toastAdded: "تمت إضافة الأداة بنجاح!",
+                toastFavAdded: "تمت الإضافة للمفضلة",
+                toastFavRemoved: "تمت الإزالة من المفضلة"
+            },
+            en: {
+                pageTitle: "AI Tools & Discord Directory | aba_alraoof",
+                logoText: "AI & Discord Hub",
+                heroBadge: "Official TikTok Account @aba_alraoof",
+                heroTitle: "Your Ultimate Hub for AI Tools & Discord Bot Tutorials",
+                heroDesc: "A complete curated directory of top AI apps, Discord bots, server workflows, and prompt engineering rules.",
+                searchPlaceholder: "Search for tools, Discord bots, or coding prompt tips...",
+                searchBtnText: "Search",
+                addBtnText: "Add Tool / Guide",
+                catAll: "All Tools",
+                catText: "Text & Writing",
+                catImage: "Image & Video",
+                catCode: "Code & Dev",
+                catDiscord: "Discord & Bots",
+                catTips: "AI Tips & Prompts",
+                catFav: "Favorites",
+                openLink: "Open Link",
+                emptyTitle: "No Results Found",
+                emptyDesc: "Try searching with different keywords or switch categories.",
+                modalHeading: "Add New Tool or Tutorial",
+                modalSubheading: "Fill in the details to save it directly to your personal directory.",
+                lblTitle: "Tool Name / Title",
+                lblDesc: "Detailed Description",
+                lblUrl: "Resource URL",
+                lblCat: "Category",
+                btnSubmitModal: "Save & Publish",
+                toastAdded: "Tool added successfully!",
+                toastFavAdded: "Added to favorites",
+                toastFavRemoved: "Removed from favorites"
+            },
+            fr: {
+                pageTitle: "Outils IA & Discord | aba_alraoof",
+                logoText: "Plateforme IA & Discord",
+                heroBadge: "Compte TikTok Officiel @aba_alraoof",
+                heroTitle: "Votre Guide Ultime pour les Outils IA et Bots Discord",
+                heroDesc: "Répertoire complet d'applications IA, de bots Discord et d'astuces de création de prompts.",
+                searchPlaceholder: "Rechercher des outils, bots Discord...",
+                searchBtnText: "Chercher",
+                addBtnText: "Ajouter un Outil",
+                catAll: "Tous",
+                catText: "Texte & Recherche",
+                catImage: "Image & Vidéo",
+                catCode: "Code & Dév",
+                catDiscord: "Discord & Bots",
+                catTips: "Astuces & Prompts",
+                catFav: "Favoris",
+                openLink: "Ouvrir le Lien",
+                emptyTitle: "Aucun résultat trouvé",
+                emptyDesc: "Essayez avec d'autres mots-clés ou changez de catégorie.",
+                modalHeading: "Ajouter un nouvel outil",
+                modalSubheading: "Remplissez les détails pour l'ajouter à votre annuaire.",
+                lblTitle: "Nom de l'outil",
+                lblDesc: "Description détaillée",
+                lblUrl: "URL de la ressource",
+                lblCat: "Catégorie",
+                btnSubmitModal: "Enregistrer",
+                toastAdded: "Outil ajouté avec succès!",
+                toastFavAdded: "Ajouté aux favoris",
+                toastFavRemoved: "Retiré des favoris"
+            },
+            de: {
+                pageTitle: "KI-Tools & Discord Verzeichnis | aba_alraoof",
+                logoText: "KI & Discord Hub",
+                heroBadge: "Offizieller TikTok Account @aba_alraoof",
+                heroTitle: "Ihr Leitfaden für KI-Tools und Discord-Bot Tutorials",
+                heroDesc: "Eine vollständige Sammlung von KI-Anwendungen, Discord-Bots und Prompt-Engineering-Tipps.",
+                searchPlaceholder: "Nach Tools, Discord-Bots suchen...",
+                searchBtnText: "Suchen",
+                addBtnText: "Tool Hinzufügen",
+                catAll: "Alle Tools",
+                catText: "Text & Schreiben",
+                catImage: "Bild & Video",
+                catCode: "Code & Entwickler",
+                catDiscord: "Discord & Bots",
+                catTips: "KI-Tipps & Prompts",
+                catFav: "Favoriten",
+                openLink: "Link Öffnen",
+                emptyTitle: "Keine Ergebnisse gefunden",
+                emptyDesc: "Versuchen Sie andere Suchbegriffe oder Kategorien.",
+                modalHeading: "Neues Tool hinzufügen",
+                modalSubheading: "Geben Sie die Details ein, um es zu speichern.",
+                lblTitle: "Tool Name / Titel",
+                lblDesc: "Detaillierte Beschreibung",
+                lblUrl: "Ressourcen-URL",
+                lblCat: "Kategorie",
+                btnSubmitModal: "Jetzt Speichern",
+                toastAdded: "Erfolgreich hinzugefügt!",
+                toastFavAdded: "Zu Favoriten hinzugefügt",
+                toastFavRemoved: "Aus Favoriten entfernt"
+            },
+            hi: {
+                pageTitle: "एआई टूल्स और डिस्कॉर्ड गाइड | aba_alraoof",
+                logoText: "एआई और डिस्कॉर्ड हब",
+                heroBadge: "आधिकारिक टिकटॉक खाता @aba_alraoof",
+                heroTitle: "एआई टूल्स और डिस्कॉर्ड बॉट्स के लिए आपकी गाइड",
+                heroDesc: "एआई ऐप्स, डिस्कॉर्ड बॉट्स और प्रॉम्प्ट टिप्स की एक संपूर्ण निर्देशिका।",
+                searchPlaceholder: "टूल्स, डिस्कॉर्ड बॉट्स खोजें...",
+                searchBtnText: "खोजें",
+                addBtnText: "टूल जोड़ें",
+                catAll: "सभी टूल्स",
+                catText: "टेक्स्ट और लेखन",
+                catImage: "छवि और वीडियो",
+                catCode: "कोड और देव",
+                catDiscord: "डिस्कॉर्ड और बॉट्स",
+                catTips: "एआई टिप्स और प्रॉम्प्ट",
+                catFav: "पसंदीदा",
+                openLink: "लिंक खोलें",
+                emptyTitle: "कोई परिणाम नहीं मिला",
+                emptyDesc: "अलग शब्दों से खोजने का प्रयास करें।",
+                modalHeading: "नया टूल जोड़ें",
+                modalSubheading: "अपनी निर्देशिका में सहेजने के लिए विवरण भरें।",
+                lblTitle: "टूल का नाम",
+                lblDesc: "विस्तृत विवरण",
+                lblUrl: "संसाधन लिंक",
+                lblCat: "श्रेणी",
+                btnSubmitModal: "सहेजें और प्रकाशित करें",
+                toastAdded: "सफलतापूर्वक जोड़ा गया!",
+                toastFavAdded: "पसंदीदा में जोड़ा गया",
+                toastFavRemoved: "पसंदीदा से हटाया गया"
+            }
+        };
+
+        // Seed Directory Data
+        const seedTools = [
+            { id: 1, name: "ChatGPT (GPT-4o)", desc: "نموذج الذكاء الاصطناعي الأقوى عالمياً للمحادثة العامة، صياغة المحتوى، وتحليل اللغات.", url: "https://chatgpt.com", category: "text", badge: "شائع جداً", icon: "fa-solid fa-robot" },
+            { id: 2, name: "Midjourney Bot (Discord)", desc: "توليد صور فائقة الواقعية بجودة سينمائية مباشرة من خوادم وبوتات ديسكورد الرسمية.", url: "https://discord.gg/midjourney", category: "discord", badge: "Pro / ديسكورد", icon: "fa-brands fa-discord" },
+            { id: 3, name: "DeepSeek R1 & V3", desc: "بطل البرمجة المجاني والنماذج التفكيرية المتقدمة التي تنافس أقوى الاشتراكات المدفوعة.", url: "https://chat.deepseek.com", category: "code", badge: "مجاني 100%", icon: "fa-solid fa-brain" },
+            { id: 4, name: "Claude 3.5 Sonnet", desc: "أدرب واجهة برمجية وتوليد الأكواد المعقدة وتحليل الملفات الكبيرة من Anthropic.", url: "https://claude.ai", category: "code", badge: "موصى به", icon: "fa-solid fa-code" },
+            { id: 5, name: "شرح إنشاء سيرفر AI على ديسكورد", desc: "فيديو تطبيقي خطوة بخطوة لبناء سيرفر ديسكورد متكامل وربطه بـ Midjourney وبوتات الدردشة.", url: "https://www.tiktok.com/@aba_alraoof", category: "discord", badge: "شرح فيديو", icon: "fa-brands fa-tiktok" },
+            { id: 6, name: "قواعد الـ Prompt Engineering", desc: "أهم القواعد الذهبية لصياغة الأوامر للحصول على نتائج برمجية دقيقة بدون أخطاء.", url: "https://www.tiktok.com/@aba_alraoof", category: "tips", badge: "نصائح حصرية", icon: "fa-solid fa-lightbulb" },
+            { id: 7, name: "Flux.1 AI Image Generator", desc: "أقوى منافس مجاني لـ Midjourney لتوليد الصور وكتابة النصوص داخل الصور بدقة متناهية.", url: "https://replicate.com/black-forest-labs/flux-schnell", category: "image", badge: "مجاني / قوي", icon: "fa-solid fa-wand-magic" },
+            { id: 8, name: "Cursor AI IDE", desc: "محرر أكواد مبني على VS Code مدمج بالذكاء الاصطناعي لكتابة وتطوير المشاريع الكاملة.", url: "https://cursor.com", category: "code", badge: "للمطورين", icon: "fa-solid fa-laptop-code" },
+            { id: 9, name: "Perplexity AI", desc: "محرك بحث ذكي يعطيك إجابات موثوقة ومحدثة مع التوثيق والمصادر المباشرة.", url: "https://www.perplexity.ai", category: "text", badge: "بحث ذكي", icon: "fa-solid fa-compass" }
+        ];
+
+        // State Management
+        let currentLang = localStorage.getItem('app_lang') || 'ar';
+        let currentCategory = 'all';
+        let toolsData = JSON.parse(localStorage.getItem('app_tools')) || seedTools;
+        let favorites = JSON.parse(localStorage.getItem('app_favs')) || [];
+
+        // App Initialization
+        window.onload = function() {
+            // Auto detect language if not stored
+            if (!localStorage.getItem('app_lang')) {
+                const userLang = (navigator.language || 'ar').substring(0, 2);
+                if (['ar', 'en', 'fr', 'de', 'hi'].includes(userLang)) {
+                    currentLang = userLang;
+                }
+            }
+
+            document.getElementById('langSelect').value = currentLang;
+            changeLanguage(currentLang);
+            renderTools();
+        };
+
+        // Language Switch Logic
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('app_lang', lang);
+            const t = translations[lang] || translations.ar;
+
+            // Text elements replacement
+            document.getElementById('pageTitle').innerText = t.pageTitle;
+            document.getElementById('logoText').innerText = t.logoText;
+            document.getElementById('heroBadge').innerText = t.heroBadge;
+            document.getElementById('heroTitle').innerHTML = t.heroTitle.replace("أدوات الذكاء الاصطناعي", `<span class="bg-gradient-to-r from-brand-600 via-indigo-500 to-violet-600 bg-clip-text text-transparent">${lang === 'ar' ? 'أدوات الذكاء الاصطناعي وشروحات ديسكورد' : 'AI Tools & Discord Guides'}</span>`);
+            document.getElementById('heroDesc').innerText = t.heroDesc;
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            document.getElementById('searchBtnText').innerText = t.searchBtnText;
+            document.getElementById('addBtnText').innerText = t.addBtnText;
+
+            // Categories Text
+            document.getElementById('catAll').innerText = t.catAll;
+            document.getElementById('catText').innerText = t.catText;
+            document.getElementById('catImage').innerText = t.catImage;
+            document.getElementById('catCode').innerText = t.catCode;
+            document.getElementById('catDiscord').innerText = t.catDiscord;
+            document.getElementById('catTips').innerText = t.catTips;
+            document.getElementById('catFav').innerText = t.catFav;
+
+            // Empty & Modal
+            document.getElementById('emptyTitle').innerText = t.emptyTitle;
+            document.getElementById('emptyDesc').innerText = t.emptyDesc;
+            document.getElementById('modalHeading').innerText = t.modalHeading;
+            document.getElementById('modalSubheading').innerText = t.modalSubheading;
+            document.getElementById('lblTitle').innerText = t.lblTitle;
+            document.getElementById('lblDesc').innerText = t.lblDesc;
+            document.getElementById('lblUrl').innerText = t.lblUrl;
+            document.getElementById('lblCat').innerText = t.lblCat;
+            document.getElementById('btnSubmitModal').innerText = t.btnSubmitModal;
+
+            // Direction Settings
+            const isRTL = lang === 'ar';
+            document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            document.documentElement.lang = lang;
+
+            renderTools();
+        }
+
+        // Filter Category Logic
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-brand-600', 'text-white', 'shadow-md', 'shadow-brand-500/20');
+                btn.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-300');
+            });
+
+            event.currentTarget.classList.add('active', 'bg-brand-600', 'text-white', 'shadow-md', 'shadow-brand-500/20');
+            event.currentTarget.classList.remove('bg-white', 'dark:bg-slate-900', 'text-slate-600', 'dark:text-slate-300');
+
+            renderTools();
+        }
+
+        // Render Cards Grid
+        function renderTools() {
+            const grid = document.getElementById('toolsGrid');
+            const emptyState = document.getElementById('emptyState');
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+            const t = translations[currentLang] || translations.ar;
+
+            grid.innerHTML = '';
+
+            const filtered = toolsData.filter(tool => {
+                const matchesCat = (currentCategory === 'all') ||
+                                   (currentCategory === 'fav' && favorites.includes(tool.id)) ||
+                                   (tool.category === currentCategory);
+                const matchesSearch = tool.name.toLowerCase().includes(search) || tool.desc.toLowerCase().includes(search);
+                return matchesCat && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach(tool => {
+                const isFav = favorites.includes(tool.id);
+                const card = `
+                    <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 border border-slate-200/80 dark:border-slate-800 shadow-sm hover:shadow-2xl hover:border-brand-500/30 transition duration-300 flex flex-col justify-between relative group">
+                        <div>
+                            <!-- Header Info -->
+                            <div class="flex items-center justify-between mb-5">
+                                <div class="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-slate-800/80 text-brand-600 dark:text-indigo-400 flex items-center justify-center text-xl shadow-inner">
+                                    <i class="${tool.icon}"></i>
+                                </div>
+                                <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                                    <button onclick="toggleFav(${tool.id})" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-400 hover:text-rose-500 flex items-center justify-center transition">
+                                        <i class="${isFav ? 'fa-solid text-rose-500' : 'fa-regular'} fa-heart text-sm"></i>
+                                    </button>
+                                    <span class="text-[11px] font-extrabold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700/60">
+                                        ${tool.badge}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Content -->
+                            <h3 class="font-black text-lg text-slate-900 dark:text-white mb-2 group-hover:text-brand-600 dark:group-hover:text-brand-500 transition">${tool.name}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed font-semibold mb-6">${tool.desc}</p>
+                        </div>
+
+                        <!-- Action Link -->
+                        <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="w-full bg-slate-900 dark:bg-brand-600 hover:bg-brand-600 dark:hover:bg-brand-700 text-white font-bold py-3 rounded-2xl text-xs text-center transition shadow-md flex items-center justify-center space-x-2 rtl:space-x-reverse">
+                            <span>${t.openLink}</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                        </a>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+        }
+
+        // Toggle Favorite Item
+        function toggleFav(id) {
+            const t = translations[currentLang] || translations.ar;
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+                showToast(t.toastFavRemoved);
+            } else {
+                favorites.push(id);
+                showToast(t.toastFavAdded);
+            }
+            localStorage.setItem('app_favs', JSON.stringify(favorites));
+            renderTools();
+        }
+
+        // Real-Time Search Handler
+        function filterTools() {
+            renderTools();
+        }
+
+        // Dark Mode Toggle Logic
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const icon = document.getElementById('themeIcon');
+            if (document.documentElement.classList.contains('dark')) {
+                icon.className = "fa-solid fa-sun text-amber-400";
+            } else {
+                icon.className = "fa-solid fa-moon";
+            }
+        }
+
+        // Modal Controls
+        function openModal() {
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+        function closeModal() {
+            document.getElementById('addModal').classList.add('hidden');
+        }
+
+        // Handle Add Custom Tool
+        function handleAddTool(e) {
+            e.preventDefault();
+            const t = translations[currentLang] || translations.ar;
+
+            const newTool = {
+                id: Date.now(),
+                name: document.getElementById('modalTitle').value,
+                desc: document.getElementById('modalDesc').value,
+                url: document.getElementById('modalUrl').value,
+                category: document.getElementById('modalCat').value,
+                badge: "مستكشف جديد",
+                icon: "fa-solid fa-sparkles"
+            };
+
+            toolsData.unshift(newTool);
+            localStorage.setItem('app_tools', JSON.stringify(toolsData));
+
+            closeModal();
+            renderTools();
+            showToast(t.toastAdded);
+
+            // Reset Form
+            document.getElementById('modalTitle').value = '';
+            document.getElementById('modalDesc').value = '';
+            document.getElementById('modalUrl').value = '';
+        }
+
+        // Toast Feedback System
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
+```
+
+***
+
+### ✨ ما تم إنجازه واختباره بالكامل:
+1. **التعرف التلقائي على اللغة المفضلة للزائر:** عربي، إنكليزي، فرنسي، ألماني، وهندي مع حفظ التفضيل وحس العرض RTL/LTR.
+2. **رابط تيك توك مباشر وشغال:** حسابك `@aba_alraoof` مدمج ومفعل عبر الهيدر، الهيرو، والفووتر.
+3. **تصنيفات كاملة للـ AI والديسكورد:** خيارات التصفية للبوتات، النصائح، الأكواد، والصور.
+4. **المفضلة والشحن بالمُدخلات الخاصّة:** إمكانية إضافة أدواتك وحفظها وإضافتها للمفضلة بالذاكرة المحلية (LocalStorage).
